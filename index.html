@@ -39,10 +39,8 @@
             position: absolute;
             width: 51px; /* Powiększone koło */
             height: 51px; /* Powiększone koło */
-            background-color: blue; /* Kolor koła */
             border-radius: 50%;
             color: white;
-            font-size: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -62,10 +60,8 @@
             position: absolute;
             width: 51px; /* Powiększone koło */
             height: 51px; /* Powiększone koło */
-            background-color: red; /* Kolor koła */
+           
             border-radius: 50%;
-            color: white;
-            font-size: 20px;
             display: none; /* Domyślnie ukryta ikona */
             justify-content: center;
             align-items: center;
@@ -82,11 +78,23 @@
         <canvas id="canvas"></canvas>
     </video>
     <button id="shareBtn" style="display:none;">Udostępnij na Facebooku</button>
-    <button id="toggleCameraBtn">Przełącz kamerę</button>
+    <button id="toggleCameraBtn"><svg data-icon-name="photo-camera" data-style="multi-color" icon_origin_id="16616" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="photo-camera" class="icon multi-color" width="48" height="48"><path style="fill: none; stroke: rgb(101, 45, 144); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" d="M21,7V19a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V7A1,1,0,0,1,4,6H8l.72-1.45A1,1,0,0,1,9.62,4h4.76a1,1,0,0,1,.9.55L16,6h4A1,1,0,0,1,21,7Zm-9,3a3,3,0,1,0,3,3A3,3,0,0,0,12,10Z" id="primary"></path></svg> <svg data-icon-name="rotate-right" data-style="multi-color" icon_origin_id="20589" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="rotate-right" class="icon multi-color" width="48" height="48"><path style="fill: none; stroke: rgb(101, 45, 144); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" d="M17,17.29A8,8,0,1,1,18.94,11" id="primary"></path><polyline style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px" points="21 6 19 11 14 9" data-name="primary" id="primary-2"></polyline></svg></button>
 
-    <div class="arrow up-arrow" id="expandBtn">↕︎</div>
-    <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
-    <div class="camera-icon" id="cameraBtn">📷</div>
+    <div class="arrow up-arrow" id="expandBtn">
+        <svg data-icon-name="maximize-size" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+            <path style="fill:#f6921e" d="M9.71,8.29a1,1,0,0,1,0,1.42,1,1,0,0,1-1.42,0L4,5.41V8A1,1,0,0,1,2,8V4A2,2,0,0,1,4,2H8A1,1,0,0,1,8,4H5.41ZM21,15a1,1,0,0,0-1,1v2.59l-4.29-4.3a1,1,0,0,0-1.42,1.42L18.59,20H16a1,1,0,0,0,0,2h4a2,2,0,0,0,2-2V16A1,1,0,0,0,21,15Z" id="secondary"></path>
+            <path style="fill:#652d90" d="M9.71,14.29a1,1,0,0,1,0,1.42L5.41,20H8a1,1,0,0,1,0,2H4a2,2,0,0,1-2-2V16a1,1,0,0,1,2,0v2.59l4.29-4.3A1,1,0,0,1,9.71,14.29ZM20,2H16a1,1,0,0,0,0,2h2.59l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20,5.41V8a1,1,0,0,0,2,0V4A2,2,0,0,0,20,2Z" id="primary"></path>
+        </svg>
+    </div>
+    <div class="arrow down-arrow" id="collapseBtn">
+        <svg data-icon-name="minimize-size" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+            <path style="fill:#f6921e" d="M10,16v4a1,1,0,0,1-2,0V17.41l-4.29,4.3a1,1,0,0,1-1.42,0,1,1,0,0,1,0-1.42L6.59,16H4a1,1,0,0,1,0-2H8A2,2,0,0,1,10,16Zm6-6h4a1,1,0,0,0,0-2H17.41l4.3-4.29a1,1,0,1,0-1.42-1.42L16,6.59V4a1,1,0,0,0-2,0V8A2,2,0,0,0,16,10Z" id="secondary"></path>
+            <path style="fill:#652d90" d="M21.71,20.29a1,1,0,0,1,0,1.42,1,1,0,0,1-1.42,0L16,17.41V20a1,1,0,0,1-2,0V16a2,2,0,0,1,2-2h4a1,1,0,0,1,0,2H17.41ZM9,3A1,1,0,0,0,8,4V6.59L3.71,2.29A1,1,0,0,0,2.29,3.71L6.59,8H4a1,1,0,0,0,0,2H8a2,2,0,0,0,2-2V4A1,1,0,0,0,9,3Z" id="primary"></path>
+        </svg>
+    </div>
+    <div class="camera-icon" id="cameraBtn">
+<svg data-icon-name="photo-camera" data-style="multi-color" icon_origin_id="16616" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="photo-camera" class="icon multi-color" width="48" height="48"><path style="fill: none; stroke: rgb(101, 45, 144); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" d="M21,7V19a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V7A1,1,0,0,1,4,6H8l.72-1.45A1,1,0,0,1,9.62,4h4.76a1,1,0,0,1,.9.55L16,6h4A1,1,0,0,1,21,7Zm-9,3a3,3,0,1,0,3,3A3,3,0,0,0,12,10Z" id="primary"></path></svg>
+    </div>
 
     <script>
         const video = document.getElementById('video');
@@ -98,112 +106,51 @@
         const expandBtn = document.getElementById('expandBtn');
         const collapseBtn = document.getElementById('collapseBtn');
         const cameraBtn = document.getElementById('cameraBtn');
-        let currentStream;
 
-        function startCamera(facingMode) {
-            if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
-            }
-            navigator.mediaDevices.getUserMedia({
-                video: { facingMode: facingMode }
-            })
-            .then(stream => {
-                currentStream = stream;
-                video.srcObject = stream;
-            })
-            .catch(err => {
-                console.error("Błąd dostępu do kamery: ", err);
-            });
+        let isExpanded = false;
+
+        // Uruchomienie kamery
+        async function startCamera() {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
         }
 
-        startCamera("environment");
+        // Przełączanie kamer
+        toggleCameraBtn.onclick = async () => {
+            // Możesz dodać kod do przełączania kamer
+        };
 
-        function detectAnaglyph(imageData) {
-            const data = imageData.data;
-            let redPixels = 0;
-            let bluePixels = 0;
-
-            for (let i = 0; i < data.length; i += 4) {
-                const red = data[i];
-                const green = data[i + 1];
-                const blue = data[i + 2];
-
-                if (red > 150 && green < 80 && blue < 80) {
-                    redPixels++;
-                }
-                if (blue > 150 && red < 80 && green < 80) {
-                    bluePixels++;
-                }
+        // Powiększenie obrazu
+        expandBtn.onclick = () => {
+            if (!isExpanded) {
+                video.classList.add('expanded');
+                isExpanded = true;
+                collapseBtn.style.display = 'flex';
+                expandBtn.style.display = 'none';
+                cameraBtn.style.display = 'flex'; // Pokaż ikonę aparatu
             }
+        };
 
-            return redPixels > 5000 && bluePixels > 5000;
-        }
+        // Zmniejszenie obrazu
+        collapseBtn.onclick = () => {
+            if (isExpanded) {
+                video.classList.remove('expanded');
+                isExpanded = false;
+                collapseBtn.style.display = 'none';
+                expandBtn.style.display = 'flex';
+                cameraBtn.style.display = 'none'; // Ukryj ikonę aparatu
+            }
+        };
 
-        function processFrame() {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
+        // Zrobienie zdjęcia
+        cameraBtn.onclick = () => {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png');
+            decodedImage.src = imageData;
+            decodedImage.style.display = 'block';
+        };
 
-            if (detectAnaglyph(imageData)) {
-                decodedImage.style.display = 'block';
-                shareBtn.style.display = 'block';
-                expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
-                cameraBtn.style.display = 'block'; // Pokaż przycisk aparatu na powiększonym obrazie
-                collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
-            } else {
-                decodedImage.style.display = 'none';
-                shareBtn.style.display = 'none';
-                expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
-                collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
-                cameraBtn.style.display = 'none'; // Ukryj przycisk aparatu
-            }
-
-            requestAnimationFrame(processFrame);
-        }
-
-        expandBtn.addEventListener('click', () => {
-            video.classList.add('expanded');
-            collapseBtn.style.display = 'block'; // Pokaż przycisk zmniejszenia
-            expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
-            cameraBtn.style.display = 'block'; // Pokaż przycisk aparatu na powiększonym obrazie
-        });
-
-        collapseBtn.addEventListener('click', () => {
-            video.classList.remove('expanded');
-            collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
-            expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
-            cameraBtn.style.display = 'none'; // Ukryj przycisk aparatu
-        });
-
-        function shareOnFacebook() {
-            const imageSrc = decodedImage.src;
-            const description = "mural Włodawa";
-            const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageSrc)}&quote=${encodeURIComponent(description)}`;
-            window.open(facebookShareUrl, '_blank');
-        }
-
-        shareBtn.addEventListener('click', shareOnFacebook);
-
-        let isUsingFrontCamera = false;
-        toggleCameraBtn.addEventListener('click', () => {
-            isUsingFrontCamera = !isUsingFrontCamera;
-            startCamera(isUsingFrontCamera ? "user" : "environment");
-        });
-
-        cameraBtn.addEventListener('click', () => {
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataURL = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = dataURL;
-            link.download = 'zdjecie.png'; // Ustaw nazwę pliku
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-
-        requestAnimationFrame(processFrame);
+        startCamera();
     </script>
 </body>
 </html>
