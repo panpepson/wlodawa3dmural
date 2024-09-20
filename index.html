@@ -36,6 +36,28 @@
         button:hover {
             background-color: #365899;
         }
+        .arrow {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .up-arrow {
+            bottom: 10px;
+            right: 10px;
+            background-image: url('up-arrow.png'); /* Wstaw ścieżkę do ikonki strzałki w górę */
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .down-arrow {
+            bottom: 10px;
+            right: 10px;
+            background-image: url('down-arrow.png'); /* Wstaw ścieżkę do ikonki strzałki w dół */
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +68,9 @@
     <button id="shareBtn">Udostępnij na Facebooku</button>
     <button id="toggleCameraBtn">Przełącz kamerę</button>
 
+    <button class="arrow up-arrow" id="expandBtn"></button>
+    <button class="arrow down-arrow" id="collapseBtn" style="display:none;"></button>
+
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
@@ -53,7 +78,8 @@
         const decodedImage = document.getElementById('decodedImage');
         const shareBtn = document.getElementById('shareBtn');
         const toggleCameraBtn = document.getElementById('toggleCameraBtn');
-        let isExpanded = false;
+        const expandBtn = document.getElementById('expandBtn');
+        const collapseBtn = document.getElementById('collapseBtn');
         let currentStream;
 
         // Funkcja do uruchomienia kamery
@@ -107,30 +133,27 @@
             if (detectAnaglyph(imageData)) {
                 decodedImage.style.display = 'block';
                 shareBtn.style.display = 'block';
+                expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
             } else {
                 decodedImage.style.display = 'none';
                 shareBtn.style.display = 'none';
+                expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
+                collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
             }
 
             requestAnimationFrame(processFrame);
         }
 
-        function toggleExpand() {
-            isExpanded = !isExpanded;
-            decodedImage.classList.toggle('expanded', isExpanded);
-        }
-
-        // Uderzenie w ekran powoduje powiększenie obrazu
-        document.addEventListener('touchstart', () => {
+        expandBtn.addEventListener('click', () => {
             decodedImage.classList.add('expanded');
+            collapseBtn.style.display = 'block'; // Pokaż przycisk zmniejszenia
+            expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
         });
 
-        decodedImage.addEventListener('click', () => {
-            // Po kliknięciu na obraz, jeśli jest powiększony, zmniejszamy go
-            if (isExpanded) {
-                isExpanded = false;
-                decodedImage.classList.remove('expanded');
-            }
+        collapseBtn.addEventListener('click', () => {
+            decodedImage.classList.remove('expanded');
+            collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
+            expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
         });
 
         function shareOnFacebook() {
