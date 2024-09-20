@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3Detektor</title>
     <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         video, canvas, img {
             width: 100%;
             max-width: 400px;
@@ -27,13 +33,13 @@
             object-fit: cover;
         }
         .arrow {
-            position: absolute;
+            position: fixed; /* Ustawiono na fixed */
             width: 30px;
             height: 30px;
             background-color: gray;
             border-radius: 50%;
             color: white;
-            font-size: 12px;
+            font-size: 20px; /* Zwiększona czcionka dla lepszej widoczności */
             display: flex;
             justify-content: center;
             align-items: center;
