@@ -16,7 +16,6 @@
             max-width: 400px;
             height: auto;
             position: relative;
-             z-index: 100;
         }
         canvas, img {
             display: none; /* Ukryj canvas i obraz */
@@ -66,12 +65,13 @@
     <video id="video" autoplay>
         <canvas id="canvas"></canvas>
         <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
-        <button id="shareBtn">Udostępnij na Facebooku</button>
-        <button id="toggleCameraBtn">Przełącz kamerę</button>
-
-        <div class="arrow up-arrow" id="expandBtn">↕︎</div>
-        <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
     </video>
+
+    <button id="shareBtn" style="display:none;">Udostępnij na Facebooku</button>
+    <button id="toggleCameraBtn">Przełącz kamerę</button>
+
+    <div class="arrow up-arrow" id="expandBtn">↕︎</div>
+    <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
 
     <script>
         const video = document.getElementById('video');
