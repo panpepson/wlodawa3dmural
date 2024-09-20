@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Odczyt Anaglifu i Wyświetlanie Obrazu 2D</title>
+    <title>Odczyt Anaglifu</title>
     <style>
         video, canvas, img {
             width: 100%;
@@ -12,6 +12,17 @@
         }
         #decodedImage {
             display: none;
+            cursor: pointer;
+        }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: black;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -26,6 +37,7 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const decodedImage = document.getElementById('decodedImage');
+        let isFullscreen = false;
 
         // Użyj tylnej kamery telefonu
         navigator.mediaDevices.getUserMedia({
@@ -90,6 +102,22 @@
             // Przetwarzamy kolejną klatkę
             requestAnimationFrame(processFrame);
         }
+
+        // Funkcja obsługująca pełny ekran
+        function toggleFullscreen() {
+            if (!isFullscreen) {
+                // Wejdź w tryb pełnoekranowy
+                decodedImage.classList.add('fullscreen');
+                isFullscreen = true;
+            } else {
+                // Wyjdź z trybu pełnoekranowego
+                decodedImage.classList.remove('fullscreen');
+                isFullscreen = false;
+            }
+        }
+
+        // Obsługa kliknięcia na obraz 2D
+        decodedImage.addEventListener('click', toggleFullscreen);
 
         // Rozpoczynamy przetwarzanie obrazu
         requestAnimationFrame(processFrame);
