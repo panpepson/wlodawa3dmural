@@ -1,0 +1,13 @@
+# Node modules
+node_modules/
+
+# Log files
+*.log
+
+# Environment files
+.env
+
+# Dodatkowe pliki, które chcesz zignorować
+.DS_Store
+Thumbs.db
+
