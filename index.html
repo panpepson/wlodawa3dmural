@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anaglyph Camera Reader (Kamera Tylna)</title>
+    <title>Anaglyph 3D GIF</title>
     <style>
         video, canvas {
             width: 100%;
@@ -13,15 +13,19 @@
     </style>
 </head>
 <body>
-    <h1>Odczyt efektu anaglify za pomocą tylnej kamery</h1>
+    <h1>Anaglif 3D z animacją GIF</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
-    <button id="capture">Przechwyć obraz</button>
+    <button id="capture">Przechwyć obraz i utwórz GIF</button>
+    <img id="gif" alt="GIF 3D" />
+
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const captureBtn = document.getElementById('capture');
+        const gifImage = document.getElementById('gif');
         const ctx = canvas.getContext('2d');
 
         // Użyj tylnej kamery telefonu
@@ -37,39 +41,64 @@
             console.error("Błąd dostępu do kamery: ", err);
         });
 
-        // Funkcja przechwytująca obraz z kamery
+        // Funkcja tworząca efekt 3D Anaglifu
+        function createAnaglyph(imageData, shift) {
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+
+            const leftImage = new Uint8ClampedArray(data); // Kopia dla czerwonego kanału
+            const rightImage = new Uint8ClampedArray(data); // Kopia dla niebieskiego kanału
+
+            // Przesuwamy obraz lewego i prawego oka
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const index = (y * width + x) * 4;
+                    const shiftedIndex = ((y * width) + Math.max(0, x - shift)) * 4;
+
+                    // Lewy obraz (czerwony kanał)
+                    leftImage[shiftedIndex] = data[index]; // Czerwony
+                    leftImage[shiftedIndex + 1] = 0;       // Zielony
+                    leftImage[shiftedIndex + 2] = 0;       // Niebieski
+
+                    // Prawy obraz (niebieski kanał)
+                    rightImage[index] = 0;                 // Czerwony
+                    rightImage[index + 1] = 0;             // Zielony
+                    rightImage[index + 2] = data[index + 2]; // Niebieski
+                }
+            }
+
+            // Zwracamy obraz po połączeniu obu
+            return new ImageData(leftImage, width, height);
+        }
+
+        // Funkcja przechwytująca obraz z kamery i tworząca GIF
         captureBtn.addEventListener('click', () => {
             // Ustawienie wymiarów canvas na takie same jak video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
 
-            // Rysowanie obrazu z video na canvas
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const gif = new GIF({
+                workers: 2,
+                quality: 10,
+            });
 
-            // Odczytanie pikseli obrazu
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
+            // Utworzenie 3 klatek z różnym przesunięciem dla efektu animacji
+            for (let shift = 0; shift <= 10; shift += 5) {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const anaglyphData = createAnaglyph(imageData, shift);
+                ctx.putImageData(anaglyphData, 0, 0);
 
-            // Przetwarzanie pikseli w poszukiwaniu anaglifów (czerwony i niebieski)
-            for (let i = 0; i < data.length; i += 4) {
-                const red = data[i];
-                const green = data[i + 1];
-                const blue = data[i + 2];
-
-                // Przykład prostego rozdzielenia czerwonych i niebieskich kanałów
-                if (red > 100 && green < 50 && blue < 50) {
-                    // Piksel czerwony (kanał dla lewego oka)
-                    data[i + 1] = 0; // Usuwamy zielony
-                    data[i + 2] = 0; // Usuwamy niebieski
-                } else if (blue > 100 && red < 50 && green < 50) {
-                    // Piksel niebieski (kanał dla prawego oka)
-                    data[i] = 0; // Usuwamy czerwony
-                    data[i + 1] = 0; // Usuwamy zielony
-                }
+                gif.addFrame(canvas, {copy: true, delay: 500});
             }
 
-            // Aktualizacja obrazu po przetworzeniu
-            ctx.putImageData(imageData, 0, 0);
+            // Generowanie GIF
+            gif.on('finished', function(blob) {
+                gifImage.src = URL.createObjectURL(blob);
+            });
+
+            gif.render();
         });
     </script>
 </body>
