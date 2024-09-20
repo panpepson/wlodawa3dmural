@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anaglyph Camera Reader</title>
+    <style>
+        video, canvas {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Odczyt efektu anaglify za pomocą kamery</h1>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+    <button id="capture">Przechwyć obraz</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('capture');
+        const ctx = canvas.getContext('2d');
+
+        // Użyj kamery telefonu
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Błąd dostępu do kamery: ", err);
+            });
+
+        // Funkcja przechwytująca obraz z kamery
+        captureBtn.addEventListener('click', () => {
+            // Ustawienie wymiarów canvas na takie same jak video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Rysowanie obrazu z video na canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Odczytanie pikseli obrazu
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // Przetwarzanie pikseli w poszukiwaniu anaglifów (czerwony i niebieski)
+            for (let i = 0; i < data.length; i += 4) {
+                const red = data[i];
+                const green = data[i + 1];
+                const blue = data[i + 2];
+
+                // Przykład prostego rozdzielenia czerwonych i niebieskich kanałów
+                if (red > 100 && green < 50 && blue < 50) {
+                    // Piksel czerwony (kanał dla lewego oka)
+                    data[i + 1] = 0; // Usuwamy zielony
+                    data[i + 2] = 0; // Usuwamy niebieski
+                } else if (blue > 100 && red < 50 && green < 50) {
+                    // Piksel niebieski (kanał dla prawego oka)
+                    data[i] = 0; // Usuwamy czerwony
+                    data[i + 1] = 0; // Usuwamy zielony
+                }
+            }
+
+            // Aktualizacja obrazu po przetworzeniu
+            ctx.putImageData(imageData, 0, 0);
+        });
+    </script>
+</body>
+</html>
+
