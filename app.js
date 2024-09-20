@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const decodedImage = document.getElementById('decodedImage');
+console.log(decodedImage);
     const toggleCameraBtn = document.getElementById('toggleCameraBtn');
     const expandBtn = document.getElementById('expandBtn');
     const collapseBtn = document.getElementById('collapseBtn');
@@ -51,24 +52,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Obsługa kliknięcia przycisku przełączania kamery
-    toggleCameraBtn.onclick = switchCamera;
+        toggleCameraBtn.onclick = switchCamera;
 
     // Obsługa kliknięcia ikony aparatu
-    cameraBtn.onclick = () => {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/png');
-        decodedImage.src = imageData;
-        decodedImage.style.display = 'block';
+        cameraBtn.onclick = () => {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = canvas.toDataURL('image/jpeg'); // Zmiana formatu na jpeg
+    console.log(imageData);
+    
+    // Ustawienie źródła obrazu
+    decodedImage.src = imageData;
+    decodedImage.style.display = 'block';
 
-        // Zapisz zdjęcie do galerii (na urządzeniu mobilnym)
-        const link = document.createElement('a');
-        link.href = imageData;
-        link.download = 'zdjecie.png'; // Nazwa pliku
-        link.click();
+    // Tworzenie linku do pobrania
+    const link = document.createElement('a');
+    const now = new Date();
+    const formattedDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+    link.href = imageData;
+    link.download = `zdjecie_${formattedDate}.jpg`; // Ustalamy nazwę pliku
+    document.body.appendChild(link);
+    link.click(); // Symulacja kliknięcia w link
+    document.body.removeChild(link); // Usunięcie linku po użyciu
 
-        // Przełączenie kamery po zrobieniu zdjęcia
-        switchCamera();
-    };
+    // Przełączenie kamery po zrobieniu zdjęcia
+    switchCamera();
+};
+
 
     // Funkcja do uruchomienia domyślnej kamery przy starcie
     startCamera();
