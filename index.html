@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Odczyt Anaglifu i Powiększanie Obrazu 2D</title>
+    <title>3Detektor</title>
     <style>
         video, canvas, img {
             width: 100%;
@@ -19,7 +19,6 @@
             transform: scale(2); /* Powiększenie obrazu */
         }
         button {
-            display: none;
             margin-top: 10px;
             padding: 10px;
             background-color: #4267B2;
@@ -33,11 +32,12 @@
     </style>
 </head>
 <body>
-    <h1>Rozpoznawanie obrazu 3D Anaglif i wyświetlanie wersji 2D</h1>
+    <h1>3Detektor</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
     <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
     <button id="shareBtn">Udostępnij na Facebooku</button>
+    <button id="toggleCameraBtn">Przełącz kamerę</button>
 
     <script>
         const video = document.getElementById('video');
@@ -45,33 +45,40 @@
         const ctx = canvas.getContext('2d');
         const decodedImage = document.getElementById('decodedImage');
         const shareBtn = document.getElementById('shareBtn');
+        const toggleCameraBtn = document.getElementById('toggleCameraBtn');
         let isExpanded = false;
+        let currentStream;
 
-        // Użyj tylnej kamery telefonu
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: { exact: "environment" } // Wymuszenie użycia tylnej kamery
+        // Funkcja do uruchomienia kamery
+        function startCamera(facingMode) {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
             }
-        })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(err => {
-            console.error("Błąd dostępu do kamery: ", err);
-        });
+            navigator.mediaDevices.getUserMedia({
+                video: { facingMode: facingMode }
+            })
+            .then(stream => {
+                currentStream = stream;
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Błąd dostępu do kamery: ", err);
+            });
+        }
+
+        // Uruchomienie kamery tylniej na początku
+        startCamera("environment");
 
         function detectAnaglyph(imageData) {
             const data = imageData.data;
             let redPixels = 0;
             let bluePixels = 0;
 
-            // Przeszukiwanie pikseli obrazu
             for (let i = 0; i < data.length; i += 4) {
                 const red = data[i];
                 const green = data[i + 1];
                 const blue = data[i + 2];
 
-                // Sprawdzamy, czy piksele mają wyraźne czerwone i niebieskie kanały (wskazuje na anaglif)
                 if (red > 150 && green < 80 && blue < 80) {
                     redPixels++;
                 }
@@ -80,11 +87,9 @@
                 }
             }
 
-            // Jeśli wykryjemy odpowiednią ilość pikseli czerwonych i niebieskich, uznajemy, że to anaglif
             return redPixels > 5000 && bluePixels > 5000;
         }
 
-        // Funkcja do monitorowania obrazu z kamery i sprawdzania obecności anaglifu
         function processFrame() {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -103,16 +108,13 @@
             requestAnimationFrame(processFrame);
         }
 
-        // Funkcja obsługująca powiększenie i zmniejszenie obrazu
         function toggleExpand() {
-            isExpanded = !isExpanded; // Przełącznik powiększenia
+            isExpanded = !isExpanded;
             decodedImage.classList.toggle('expanded', isExpanded);
         }
 
-        // Obsługa dotyku na ekranie telefonu
-        decodedImage.addEventListener('click', toggleExpand); // Użyj 'click' dla łatwiejszego testowania
+        decodedImage.addEventListener('click', toggleExpand);
 
-        // Funkcja udostępniania na Facebooku
         function shareOnFacebook() {
             const imageSrc = decodedImage.src;
             const description = "mural Włodawa";
@@ -122,7 +124,13 @@
 
         shareBtn.addEventListener('click', shareOnFacebook);
 
-        // Rozpoczynamy przetwarzanie obrazu
+        // Przełączanie kamer
+        let isUsingFrontCamera = false;
+        toggleCameraBtn.addEventListener('click', () => {
+            isUsingFrontCamera = !isUsingFrontCamera;
+            startCamera(isUsingFrontCamera ? "user" : "environment");
+        });
+
         requestAnimationFrame(processFrame);
     </script>
 </body>
