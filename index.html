@@ -120,7 +120,18 @@
             decodedImage.classList.toggle('expanded', isExpanded);
         }
 
-        decodedImage.addEventListener('click', toggleExpand);
+        // Uderzenie w ekran powoduje powiększenie obrazu
+        document.addEventListener('touchstart', () => {
+            decodedImage.classList.add('expanded');
+        });
+
+        decodedImage.addEventListener('click', () => {
+            // Po kliknięciu na obraz, jeśli jest powiększony, zmniejszamy go
+            if (isExpanded) {
+                isExpanded = false;
+                decodedImage.classList.remove('expanded');
+            }
+        });
 
         function shareOnFacebook() {
             const imageSrc = decodedImage.src;
