@@ -49,14 +49,21 @@
             cursor: pointer;
             z-index: 1001; /* Wysoki z-index */
         }
-        .up-arrow {
-            bottom: 10px;
-            right: 10px;
-        }
-        .down-arrow {
-            bottom: 50px;
-            right: 10px;
-            display: none; /* Domyślnie ukryte */
+        .camera-icon {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: red; /* Kolor koła */
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001; /* Wysoki z-index */
+            bottom: 50px; /* Położenie ikony aparatu */
+            right: 10px; /* Położenie ikony aparatu */
         }
     </style>
 </head>
@@ -70,8 +77,9 @@
     <button id="shareBtn" style="display:none;">Udostępnij na Facebooku</button>
     <button id="toggleCameraBtn">Przełącz kamerę</button>
 
-    <div class="arrow up-arrow" id="expandBtn">↕︎</div>
-    <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
+    <div class="arrow" id="expandBtn">⛞</div>
+    <div class="camera-icon" id="cameraBtn">📷</div>
+    <div class="arrow" id="collapseBtn">⛞</div>
 
     <script>
         const video = document.getElementById('video');
@@ -82,6 +90,7 @@
         const toggleCameraBtn = document.getElementById('toggleCameraBtn');
         const expandBtn = document.getElementById('expandBtn');
         const collapseBtn = document.getElementById('collapseBtn');
+        const cameraBtn = document.getElementById('cameraBtn');
         let currentStream;
 
         function startCamera(facingMode) {
@@ -169,6 +178,17 @@
         toggleCameraBtn.addEventListener('click', () => {
             isUsingFrontCamera = !isUsingFrontCamera;
             startCamera(isUsingFrontCamera ? "user" : "environment");
+        });
+
+        cameraBtn.addEventListener('click', () => {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'zdjecie.png'; // Ustaw nazwę pliku
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
 
         requestAnimationFrame(processFrame);
