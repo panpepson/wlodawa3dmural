@@ -22,6 +22,18 @@
             max-height: none;
             transform: scale(2); /* Powiększenie obrazu */
         }
+        button {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4267B2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #365899;
+        }
     </style>
 </head>
 <body>
@@ -29,12 +41,14 @@
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
     <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
+    <button id="shareBtn">Udostępnij na Facebooku</button>
 
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const decodedImage = document.getElementById('decodedImage');
+        const shareBtn = document.getElementById('shareBtn');
         let isExpanded = false;
 
         // Użyj tylnej kamery telefonu
@@ -93,8 +107,10 @@
             if (detectAnaglyph(imageData)) {
                 // Wyświetlamy "rozszyfrowany" obraz 2D
                 decodedImage.style.display = 'block';
+                shareBtn.style.display = 'block';
             } else {
                 decodedImage.style.display = 'none';
+                shareBtn.style.display = 'none';
             }
 
             // Przetwarzamy kolejną klatkę
@@ -114,8 +130,23 @@
             }
         }
 
-        // Obsługa kliknięcia na obraz 2D
-        decodedImage.addEventListener('click', toggleExpand);
+        // Obsługa dotyku na ekranie telefonu
+        decodedImage.addEventListener('touchstart', toggleExpand);
+
+        // Funkcja udostępniania na Facebooku
+        function shareOnFacebook() {
+            const imageSrc = decodedImage.src;
+            const description = "pep
+
+            // Zbuduj link do Facebooka z obrazem i opisem
+            const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageSrc)}&quote=${encodeURIComponent(description)}`;
+
+            // Otwórz nowe okno do udostępnienia
+            window.open(facebookShareUrl, '_blank');
+        }
+
+        // Obsługa kliknięcia na przycisk "Udostępnij na Facebooku"
+        shareBtn.addEventListener('click', shareOnFacebook);
 
         // Rozpoczynamy przetwarzanie obrazu
         requestAnimationFrame(processFrame);
