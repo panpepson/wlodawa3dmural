@@ -37,8 +37,8 @@
         }
         .arrow {
             position: absolute;
-            width: 21px;
-            height: 21px;
+            width: 51px; /* Powiększone koło */
+            height: 51px; /* Powiększone koło */
             background-color: blue; /* Kolor koła */
             border-radius: 50%;
             color: white;
@@ -54,13 +54,14 @@
             right: 10px; /* Niebieskie koło w prawym dolnym rogu */
         }
         .down-arrow {
-            bottom: 50px;
-            left: calc(50% - 10.5px); /* Czerwone koło na środku na dole */
+            bottom: 70px; /* Przesunięcie w górę */
+            right: 10px; /* Niebieskie koło w prawym dolnym rogu */
+            display: none; /* Domyślnie ukryta ikona zmniejszenia */
         }
         .camera-icon {
             position: absolute;
-            width: 21px;
-            height: 21px;
+            width: 51px; /* Powiększone koło */
+            height: 51px; /* Powiększone koło */
             background-color: red; /* Kolor koła */
             border-radius: 50%;
             color: white;
@@ -70,8 +71,8 @@
             align-items: center;
             cursor: pointer;
             z-index: 1001; /* Wysoki z-index */
-            bottom: 50px; /* Położenie ikony aparatu */
-            left: calc(50% - 10.5px); /* Środek ekranu */
+            bottom: 10px; /* Położenie ikony aparatu */
+            left: calc(50% - 25.5px); /* Środek ekranu */
         }
     </style>
 </head>
@@ -79,16 +80,13 @@
     <h1>3Detektor</h1>
     <video id="video" autoplay>
         <canvas id="canvas"></canvas>
-        
-    
+    </video>
     <button id="shareBtn" style="display:none;">Udostępnij na Facebooku</button>
     <button id="toggleCameraBtn">Przełącz kamerę</button>
 
     <div class="arrow up-arrow" id="expandBtn">↕︎</div>
-    <div class="camera-icon" id="cameraBtn">📷</div>
     <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
-
-</video>
+    <div class="camera-icon" id="cameraBtn">📷</div>
 
     <script>
         const video = document.getElementById('video');
@@ -153,6 +151,7 @@
                 shareBtn.style.display = 'block';
                 expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
                 cameraBtn.style.display = 'block'; // Pokaż przycisk aparatu na powiększonym obrazie
+                collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
             } else {
                 decodedImage.style.display = 'none';
                 shareBtn.style.display = 'none';
