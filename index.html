@@ -71,7 +71,7 @@
                 const green = data[i + 1];
                 const blue = data[i + 2];
 
-                // Sprawdzamy czy piksele mają wyraźne czerwone i niebieskie kanały (wskazuje na anaglif)
+                // Sprawdzamy, czy piksele mają wyraźne czerwone i niebieskie kanały (wskazuje na anaglif)
                 if (red > 150 && green < 80 && blue < 80) {
                     redPixels++;
                 }
@@ -81,27 +81,18 @@
             }
 
             // Jeśli wykryjemy odpowiednią ilość pikseli czerwonych i niebieskich, uznajemy, że to anaglif
-            if (redPixels > 5000 && bluePixels > 5000) {
-                return true;
-            }
-            return false;
+            return redPixels > 5000 && bluePixels > 5000;
         }
 
         // Funkcja do monitorowania obrazu z kamery i sprawdzania obecności anaglifu
         function processFrame() {
-            // Ustawienie wymiarów canvas na takie same jak video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
 
-            // Rysowanie obrazu z kamery na canvas
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            // Odczytanie pikseli obrazu
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-            // Sprawdzamy, czy obraz zawiera anaglif
             if (detectAnaglyph(imageData)) {
-                // Wyświetlamy "rozszyfrowany" obraz 2D
                 decodedImage.style.display = 'block';
                 shareBtn.style.display = 'block';
             } else {
@@ -109,36 +100,26 @@
                 shareBtn.style.display = 'none';
             }
 
-            // Przetwarzamy kolejną klatkę
             requestAnimationFrame(processFrame);
         }
 
         // Funkcja obsługująca powiększenie i zmniejszenie obrazu
         function toggleExpand() {
             isExpanded = !isExpanded; // Przełącznik powiększenia
-            if (isExpanded) {
-                decodedImage.classList.add('expanded');
-            } else {
-                decodedImage.classList.remove('expanded');
-            }
+            decodedImage.classList.toggle('expanded', isExpanded);
         }
 
         // Obsługa dotyku na ekranie telefonu
-        decodedImage.addEventListener('touchstart', toggleExpand);
+        decodedImage.addEventListener('click', toggleExpand); // Użyj 'click' dla łatwiejszego testowania
 
         // Funkcja udostępniania na Facebooku
         function shareOnFacebook() {
             const imageSrc = decodedImage.src;
             const description = "mural Włodawa";
-
-            // Zbuduj link do Facebooka z obrazem i opisem
             const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageSrc)}&quote=${encodeURIComponent(description)}`;
-
-            // Otwórz nowe okno do udostępnienia
             window.open(facebookShareUrl, '_blank');
         }
 
-        // Obsługa kliknięcia na przycisk "Udostępnij na Facebooku"
         shareBtn.addEventListener('click', shareOnFacebook);
 
         // Rozpoczynamy przetwarzanie obrazu
