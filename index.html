@@ -11,11 +11,14 @@
             flex-direction: column;
             align-items: center;
         }
-        video, canvas, img {
+        video {
             width: 100%;
             max-width: 400px;
             height: auto;
             position: relative;
+        }
+        canvas, img {
+            display: none; /* Ukryj canvas i obraz */
         }
         #decodedImage {
             display: none;
@@ -33,17 +36,18 @@
             object-fit: cover;
         }
         .arrow {
-            position: fixed; /* Ustawiono na fixed */
+            position: absolute;
             width: 30px;
             height: 30px;
             background-color: gray;
             border-radius: 50%;
             color: white;
-            font-size: 20px; /* Zwiększona czcionka dla lepszej widoczności */
+            font-size: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            z-index: 1001; /* Wysoki z-index */
         }
         .up-arrow {
             bottom: 10px;
@@ -59,14 +63,15 @@
 <body>
     <h1>3Detektor</h1>
     <video id="video" autoplay>
-    <canvas id="canvas"></canvas>
-    <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
-    <button id="shareBtn">Udostępnij na Facebooku</button>
-    <button id="toggleCameraBtn">Przełącz kamerę</button>
+        <canvas id="canvas"></canvas>
+        <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
+        <button id="shareBtn">Udostępnij na Facebooku</button>
+        <button id="toggleCameraBtn">Przełącz kamerę</button>
 
-    <div class="arrow up-arrow" id="expandBtn">↕︎</div>
-    <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
-</video>
+        <div class="arrow up-arrow" id="expandBtn">↕︎</div>
+        <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
+    </video>
+
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
@@ -78,7 +83,6 @@
         const collapseBtn = document.getElementById('collapseBtn');
         let currentStream;
 
-        // Funkcja do uruchomienia kamery
         function startCamera(facingMode) {
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
@@ -95,7 +99,6 @@
             });
         }
 
-        // Uruchomienie kamery tylniej na początku
         startCamera("environment");
 
         function detectAnaglyph(imageData) {
@@ -161,7 +164,6 @@
 
         shareBtn.addEventListener('click', shareOnFacebook);
 
-        // Przełączanie kamer
         let isUsingFrontCamera = false;
         toggleCameraBtn.addEventListener('click', () => {
             isUsingFrontCamera = !isUsingFrontCamera;
