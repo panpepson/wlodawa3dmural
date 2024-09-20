@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>Anaglif 3D z animacją GIF</h1>
+    <h1>Anaglif GIF</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
     <button id="capture">Przechwyć obraz i utwórz GIF</button>
@@ -57,19 +57,28 @@
                     const shiftedIndex = ((y * width) + Math.max(0, x - shift)) * 4;
 
                     // Lewy obraz (czerwony kanał)
-                    leftImage[shiftedIndex] = data[index]; // Czerwony
-                    leftImage[shiftedIndex + 1] = 0;       // Zielony
-                    leftImage[shiftedIndex + 2] = 0;       // Niebieski
+                    if (shiftedIndex < data.length) {
+                        leftImage[shiftedIndex] = data[index]; // Czerwony
+                        leftImage[shiftedIndex + 1] = 0;       // Zielony
+                        leftImage[shiftedIndex + 2] = 0;       // Niebieski
+                    }
 
                     // Prawy obraz (niebieski kanał)
-                    rightImage[index] = 0;                 // Czerwony
-                    rightImage[index + 1] = 0;             // Zielony
-                    rightImage[index + 2] = data[index + 2]; // Niebieski
+                    if (index < data.length) {
+                        rightImage[index] = 0;                 // Czerwony
+                        rightImage[index + 1] = 0;             // Zielony
+                        rightImage[index + 2] = data[index + 2]; // Niebieski
+                    }
                 }
             }
 
-            // Zwracamy obraz po połączeniu obu
-            return new ImageData(leftImage, width, height);
+            // Połączenie obrazu dla obu kanałów
+            for (let i = 0; i < data.length; i += 4) {
+                data[i] = leftImage[i];       // Czerwony
+                data[i + 2] = rightImage[i + 2]; // Niebieski
+            }
+
+            return imageData;
         }
 
         // Funkcja przechwytująca obraz z kamery i tworząca GIF
