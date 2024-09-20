@@ -37,8 +37,8 @@
         }
         .arrow {
             position: absolute;
-            width: 41px;
-            height: 41px;
+            width: 21px;
+            height: 21px;
             background-color: blue; /* Kolor koła */
             border-radius: 50%;
             color: white;
@@ -50,8 +50,8 @@
             z-index: 1001; /* Wysoki z-index */
         }
         .up-arrow {
-            bottom: 41px;
-            right: 41px; /* Niebieskie koło w prawym dolnym rogu */
+            bottom: 10px;
+            right: 10px; /* Niebieskie koło w prawym dolnym rogu */
         }
         .down-arrow {
             bottom: 50px;
@@ -59,13 +59,13 @@
         }
         .camera-icon {
             position: absolute;
-            width: 41px;
-            height: 41px;
+            width: 21px;
+            height: 21px;
             background-color: red; /* Kolor koła */
             border-radius: 50%;
             color: white;
             font-size: 20px;
-            display: flex;
+            display: none; /* Domyślnie ukryta ikona */
             justify-content: center;
             align-items: center;
             cursor: pointer;
@@ -85,10 +85,10 @@
     <button id="shareBtn" style="display:none;">Udostępnij na Facebooku</button>
     <button id="toggleCameraBtn">Przełącz kamerę</button>
 
-   <div class="arrow up-arrow" id="expandBtn">↕︎</div>
-  
-<div class="arrow down-arrow" id="collapseBtn">↕︎</div>
-  <div class="camera-icon" id="cameraBtn">📷</div>
+    <div class="arrow up-arrow" id="expandBtn">↕︎</div>
+    <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
+    <div class="camera-icon" id="cameraBtn">📷</div>
+
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
@@ -151,11 +151,13 @@
                 decodedImage.style.display = 'block';
                 shareBtn.style.display = 'block';
                 expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
+                cameraBtn.style.display = 'block'; // Pokaż przycisk aparatu na powiększonym obrazie
             } else {
                 decodedImage.style.display = 'none';
                 shareBtn.style.display = 'none';
                 expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
                 collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
+                cameraBtn.style.display = 'none'; // Ukryj przycisk aparatu
             }
 
             requestAnimationFrame(processFrame);
@@ -165,12 +167,14 @@
             video.classList.add('expanded');
             collapseBtn.style.display = 'block'; // Pokaż przycisk zmniejszenia
             expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
+            cameraBtn.style.display = 'block'; // Pokaż przycisk aparatu na powiększonym obrazie
         });
 
         collapseBtn.addEventListener('click', () => {
             video.classList.remove('expanded');
             collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
             expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
+            cameraBtn.style.display = 'none'; // Ukryj przycisk aparatu
         });
 
         function shareOnFacebook() {
