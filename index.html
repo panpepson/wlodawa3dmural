@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anaglyph 3D GIF</title>
+    <title>Odczyt Anaglifu i Wyświetlanie Obrazu 2D</title>
     <style>
-        video, canvas {
+        video, canvas, img {
             width: 100%;
             max-width: 400px;
             height: auto;
         }
+        #decodedImage {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>Anaglif GIF</h1>
+    <h1>Rozpoznawanie obrazu 3D Anaglif i wyświetlanie wersji 2D</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
-    <button id="capture">Przechwyć obraz i utwórz GIF</button>
-    <img id="gif" alt="GIF 3D" />
-
-    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+    <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
 
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
-        const captureBtn = document.getElementById('capture');
-        const gifImage = document.getElementById('gif');
         const ctx = canvas.getContext('2d');
+        const decodedImage = document.getElementById('decodedImage');
 
         // Użyj tylnej kamery telefonu
         navigator.mediaDevices.getUserMedia({
@@ -41,74 +40,59 @@
             console.error("Błąd dostępu do kamery: ", err);
         });
 
-        // Funkcja tworząca efekt 3D Anaglifu
-        function createAnaglyph(imageData, shift) {
+        function detectAnaglyph(imageData) {
             const data = imageData.data;
-            const width = imageData.width;
-            const height = imageData.height;
+            let redPixels = 0;
+            let bluePixels = 0;
 
-            const leftImage = new Uint8ClampedArray(data); // Kopia dla czerwonego kanału
-            const rightImage = new Uint8ClampedArray(data); // Kopia dla niebieskiego kanału
+            // Przeszukiwanie pikseli obrazu
+            for (let i = 0; i < data.length; i += 4) {
+                const red = data[i];
+                const green = data[i + 1];
+                const blue = data[i + 2];
 
-            // Przesuwamy obraz lewego i prawego oka
-            for (let y = 0; y < height; y++) {
-                for (let x = 0; x < width; x++) {
-                    const index = (y * width + x) * 4;
-                    const shiftedIndex = ((y * width) + Math.max(0, x - shift)) * 4;
-
-                    // Lewy obraz (czerwony kanał)
-                    if (shiftedIndex < data.length) {
-                        leftImage[shiftedIndex] = data[index]; // Czerwony
-                        leftImage[shiftedIndex + 1] = 0;       // Zielony
-                        leftImage[shiftedIndex + 2] = 0;       // Niebieski
-                    }
-
-                    // Prawy obraz (niebieski kanał)
-                    if (index < data.length) {
-                        rightImage[index] = 0;                 // Czerwony
-                        rightImage[index + 1] = 0;             // Zielony
-                        rightImage[index + 2] = data[index + 2]; // Niebieski
-                    }
+                // Sprawdzamy czy piksele mają wyraźne czerwone i niebieskie kanały (wskazuje na anaglif)
+                if (red > 150 && green < 80 && blue < 80) {
+                    redPixels++;
+                }
+                if (blue > 150 && red < 80 && green < 80) {
+                    bluePixels++;
                 }
             }
 
-            // Połączenie obrazu dla obu kanałów
-            for (let i = 0; i < data.length; i += 4) {
-                data[i] = leftImage[i];       // Czerwony
-                data[i + 2] = rightImage[i + 2]; // Niebieski
+            // Jeśli wykryjemy odpowiednią ilość pikseli czerwonych i niebieskich, uznajemy, że to anaglif
+            if (redPixels > 5000 && bluePixels > 5000) {
+                return true;
             }
-
-            return imageData;
+            return false;
         }
 
-        // Funkcja przechwytująca obraz z kamery i tworząca GIF
-        captureBtn.addEventListener('click', () => {
+        // Funkcja do monitorowania obrazu z kamery i sprawdzania obecności anaglifu
+        function processFrame() {
             // Ustawienie wymiarów canvas na takie same jak video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
 
-            const gif = new GIF({
-                workers: 2,
-                quality: 10,
-            });
+            // Rysowanie obrazu z kamery na canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // Utworzenie 3 klatek z różnym przesunięciem dla efektu animacji
-            for (let shift = 0; shift <= 10; shift += 5) {
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const anaglyphData = createAnaglyph(imageData, shift);
-                ctx.putImageData(anaglyphData, 0, 0);
+            // Odczytanie pikseli obrazu
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-                gif.addFrame(canvas, {copy: true, delay: 500});
+            // Sprawdzamy, czy obraz zawiera anaglif
+            if (detectAnaglyph(imageData)) {
+                // Wyświetlamy "rozszyfrowany" obraz 2D
+                decodedImage.style.display = 'block';
+            } else {
+                decodedImage.style.display = 'none';
             }
 
-            // Generowanie GIF
-            gif.on('finished', function(blob) {
-                gifImage.src = URL.createObjectURL(blob);
-            });
+            // Przetwarzamy kolejną klatkę
+            requestAnimationFrame(processFrame);
+        }
 
-            gif.render();
-        });
+        // Rozpoczynamy przetwarzanie obrazu
+        requestAnimationFrame(processFrame);
     </script>
 </body>
 </html>
