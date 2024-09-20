@@ -28,25 +28,25 @@
         }
         .arrow {
             position: absolute;
-            width: 50px;
-            height: 50px;
-            background: transparent;
-            border: none;
+            width: 30px;
+            height: 30px;
+            background-color: gray;
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
         }
         .up-arrow {
             bottom: 10px;
             right: 10px;
-            background-image: url('up-arrow.png'); /* Wstaw ścieżkę do ikonki strzałki w górę */
-            background-size: contain;
-            background-repeat: no-repeat;
         }
         .down-arrow {
-            bottom: 10px;
+            bottom: 50px;
             right: 10px;
-            background-image: url('down-arrow.png'); /* Wstaw ścieżkę do ikonki strzałki w dół */
-            background-size: contain;
-            background-repeat: no-repeat;
+            display: none; /* Domyślnie ukryte */
         }
     </style>
 </head>
@@ -58,8 +58,8 @@
     <button id="shareBtn">Udostępnij na Facebooku</button>
     <button id="toggleCameraBtn">Przełącz kamerę</button>
 
-    <button class="arrow up-arrow" id="expandBtn"></button>
-    <button class="arrow down-arrow" id="collapseBtn" style="display:none;"></button>
+    <div class="arrow up-arrow" id="expandBtn">↕︎</div>
+    <div class="arrow down-arrow" id="collapseBtn">↕︎</div>
 
     <script>
         const video = document.getElementById('video');
