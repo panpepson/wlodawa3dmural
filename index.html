@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anaglyph Camera Reader</title>
+    <title>Anaglyph Camera Reader (Kamera Tylna)</title>
     <style>
         video, canvas {
             width: 100%;
@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>Odczyt efektu anaglify za pomocą kamery</h1>
+    <h1>Odczyt efektu anaglify za pomocą tylnej kamery</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
     <button id="capture">Przechwyć obraz</button>
@@ -24,14 +24,18 @@
         const captureBtn = document.getElementById('capture');
         const ctx = canvas.getContext('2d');
 
-        // Użyj kamery telefonu
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => {
-                console.error("Błąd dostępu do kamery: ", err);
-            });
+        // Użyj tylnej kamery telefonu
+        navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: { exact: "environment" } // Wymuszenie użycia tylnej kamery
+            }
+        })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => {
+            console.error("Błąd dostępu do kamery: ", err);
+        });
 
         // Funkcja przechwytująca obraz z kamery
         captureBtn.addEventListener('click', () => {
