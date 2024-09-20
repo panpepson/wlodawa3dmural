@@ -16,10 +16,6 @@
             transition: transform 0.3s ease;
         }
         .expanded {
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            max-height: none;
             transform: scale(2); /* Powiększenie obrazu */
         }
         button {
@@ -37,7 +33,7 @@
     </style>
 </head>
 <body>
-    <h1>Rozpoznawanie obrazu 3D</h1>
+    <h1>Rozpoznawanie obrazu 3D Anaglif i wyświetlanie wersji 2D</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
     <img id="decodedImage" src="zamysl_artysty.jpg" alt="Obraz 2D" />
@@ -119,14 +115,11 @@
 
         // Funkcja obsługująca powiększenie i zmniejszenie obrazu
         function toggleExpand() {
-            if (!isExpanded) {
-                // Powiększ obraz
+            isExpanded = !isExpanded; // Przełącznik powiększenia
+            if (isExpanded) {
                 decodedImage.classList.add('expanded');
-                isExpanded = true;
             } else {
-                // Zmniejsz obraz
                 decodedImage.classList.remove('expanded');
-                isExpanded = false;
             }
         }
 
@@ -136,7 +129,7 @@
         // Funkcja udostępniania na Facebooku
         function shareOnFacebook() {
             const imageSrc = decodedImage.src;
-            const description = "pep
+            const description = "mural Włodawa";
 
             // Zbuduj link do Facebooka z obrazem i opisem
             const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageSrc)}&quote=${encodeURIComponent(description)}`;
