@@ -14,9 +14,16 @@
             display: none;
             cursor: pointer;
             transition: transform 0.3s ease;
+            position: relative;
         }
         .expanded {
-            transform: scale(2); /* Powiększenie obrazu */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            object-fit: cover;
         }
         button {
             margin-top: 10px;
