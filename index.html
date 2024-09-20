@@ -9,6 +9,7 @@
             width: 100%;
             max-width: 400px;
             height: auto;
+            position: relative;
         }
         #decodedImage {
             display: none;
@@ -24,17 +25,6 @@
             height: 100vh;
             z-index: 1000;
             object-fit: cover;
-        }
-        button {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #4267B2;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #365899;
         }
         .arrow {
             position: absolute;
@@ -145,13 +135,13 @@
         }
 
         expandBtn.addEventListener('click', () => {
-            decodedImage.classList.add('expanded');
+            video.classList.add('expanded');
             collapseBtn.style.display = 'block'; // Pokaż przycisk zmniejszenia
             expandBtn.style.display = 'none'; // Ukryj przycisk powiększenia
         });
 
         collapseBtn.addEventListener('click', () => {
-            decodedImage.classList.remove('expanded');
+            video.classList.remove('expanded');
             collapseBtn.style.display = 'none'; // Ukryj przycisk zmniejszenia
             expandBtn.style.display = 'block'; // Pokaż przycisk powiększenia
         });
