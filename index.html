@@ -168,15 +168,21 @@
     // Obsługa kliknięcia przycisku przełączania kamery
     toggleCameraBtn.onclick = switchCamera;
 
-    // Obsługa kliknięcia ikony aparatu
+    // Funkcja do robienia zdjęcia po naciśnięciu ikony aparatu
     cameraBtn.onclick = () => {
+        // Ustawienie rozmiaru canvas na rozmiar wideo
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Przechwycenie obrazu z wideo i narysowanie go na canvas
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Konwersja obrazu na dane w formacie PNG
         const imageData = canvas.toDataURL('image/png');
+
+        // Wyświetlenie zapisanego zdjęcia
         decodedImage.src = imageData;
         decodedImage.style.display = 'block';
-
-        // Przełączenie kamery po zrobieniu zdjęcia
-        switchCamera();
     };
 
     // Funkcja do uruchomienia domyślnej kamery przy starcie
@@ -204,6 +210,7 @@
         }
     };
 </script>
+
 
 
 
