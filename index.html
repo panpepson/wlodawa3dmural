@@ -78,6 +78,24 @@
     cursor: pointer; /* Wskaźnik myszy na przycisk */
     position: relative; /* Umożliwia pozycjonowanie ikon */
 }
+.heart-icon {
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1002; /* Powinny być nad kamerą */
+}
+.red-heart {
+    bottom: 51px; /* 21px nad ikoną aparatu */
+    left: calc(50% - 71px); /* Lewa strona serduszka, 51px od środka + 21px */
+}
+.blue-heart {
+    bottom: 51px; /* 21px nad ikoną aparatu */
+    left: calc(50% + 25px); /* Prawa strona serduszka */
+}
 
     </style>
 </head>
@@ -88,8 +106,9 @@
     </video> 
 <img id="decodedImage" style="display:none;" />
     <button id="shareBtn" style="display:none;">Udostępnij na Facebooku</button>
-    <button id="toggleCameraBtn">
 
+
+    <button id="toggleCameraBtn">
 <svg data-icon-name="rotate-right" data-style="multi-color" icon_origin_id="20589" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="rotate-right" class="icon multi-color" width="28" height="28"><path style="fill: none; stroke: rgb(101, 45, 144); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" d="M17,17.29A8,8,0,1,1,18.94,11" id="primary"></path><polyline style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px" points="21 6 19 11 14 9" data-name="primary" id="primary-2"></polyline></svg>
 
 <svg data-icon-name="photo-camera" data-style="multi-color" icon_origin_id="16616" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="photo-camera" class="icon multi-color" width="28" height="28"><path style="fill: none; stroke: rgb(101, 45, 144); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" d="M21,7V19a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V7A1,1,0,0,1,4,6H8l.72-1.45A1,1,0,0,1,9.62,4h4.76a1,1,0,0,1,.9.55L16,6h4A1,1,0,0,1,21,7Zm-9,3a3,3,0,1,0,3,3A3,3,0,0,0,12,10Z" id="primary"></path></svg> 
@@ -111,108 +130,9 @@
     <div class="camera-icon" id="cameraBtn">
 <svg data-icon-name="photo-camera" data-style="multi-color" icon_origin_id="16616" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="photo-camera" class="icon multi-color" width="48" height="48"><path style="fill: none; stroke: rgb(101, 45, 144); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" d="M21,7V19a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V7A1,1,0,0,1,4,6H8l.72-1.45A1,1,0,0,1,9.62,4h4.76a1,1,0,0,1,.9.55L16,6h4A1,1,0,0,1,21,7Zm-9,3a3,3,0,1,0,3,3A3,3,0,0,0,12,10Z" id="primary"></path></svg>
     </div>
-<!--
-<script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const decodedImage = document.getElementById('decodedImage');
-    const shareBtn = document.getElementById('shareBtn');
-    const toggleCameraBtn = document.getElementById('toggleCameraBtn');
-    const expandBtn = document.getElementById('expandBtn');
-    const collapseBtn = document.getElementById('collapseBtn');
-    const cameraBtn = document.getElementById('cameraBtn');
 
-    let isExpanded = false;
-    let currentStream = null;
-    let videoDevices = [];
-    let currentCameraIndex = 0;
-
-    // Funkcja uruchamiania kamery
-    async function startCamera(deviceId = null) {
-        const constraints = {
-            video: deviceId ? { deviceId: { exact: deviceId } } : true
-        };
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            video.srcObject = stream;
-            currentStream = stream;
-        } catch (error) {
-            console.error('Błąd uruchamiania kamery:', error);
-        }
-    }
-
-    // Zatrzymanie bieżącego strumienia
-    function stopCurrentStream() {
-        if (currentStream) {
-            currentStream.getTracks().forEach(track => track.stop());
-        }
-    }
-
-    // Funkcja przełączania kamer
-    async function switchCamera() {
-        if (videoDevices.length === 0) {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            videoDevices = devices.filter(device => device.kind === 'videoinput');
-        }
-
-        if (videoDevices.length > 1) {
-            // Przełączanie między kamerami
-            currentCameraIndex = (currentCameraIndex + 1) % videoDevices.length;
-
-            // Zatrzymanie aktualnego strumienia i uruchomienie kamery
-            stopCurrentStream();
-            await startCamera(videoDevices[currentCameraIndex].deviceId);
-        }
-    }
-
-    // Obsługa kliknięcia przycisku przełączania kamery
-    toggleCameraBtn.onclick = switchCamera;
-
-    // Funkcja do robienia zdjęcia po naciśnięciu ikony aparatu
-    cameraBtn.onclick = () => {
-        // Ustawienie rozmiaru canvas na rozmiar wideo
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        // Przechwycenie obrazu z wideo i narysowanie go na canvas
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Konwersja obrazu na dane w formacie PNG
-        const imageData = canvas.toDataURL('image/png');
-
-        // Wyświetlenie zapisanego zdjęcia
-        decodedImage.src = imageData;
-        decodedImage.style.display = 'block';
-    };
-
-    // Funkcja do uruchomienia domyślnej kamery przy starcie
-    startCamera();
-
-    // Powiększenie obrazu
-    expandBtn.onclick = () => {
-        if (!isExpanded) {
-            video.classList.add('expanded');
-            isExpanded = true;
-            collapseBtn.style.display = 'flex';
-            expandBtn.style.display = 'none';
-            cameraBtn.style.display = 'flex'; // Pokaż ikonę aparatu
-        }
-    };
-
-    // Zmniejszenie obrazu
-    collapseBtn.onclick = () => {
-        if (isExpanded) {
-            video.classList.remove('expanded');
-            isExpanded = false;
-            collapseBtn.style.display = 'none';
-            expandBtn.style.display = 'flex';
-            cameraBtn.style.display = 'none'; // Ukryj ikonę aparatu
-        }
-    };
-</script>
--->
+<div class="heart-icon red-heart" id="redHeart">❤️</div>
+<div class="heart-icon blue-heart" id="blueHeart">💙</div>
 
 <script src="app.js"></script>
 

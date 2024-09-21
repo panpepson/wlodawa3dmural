@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const decodedImage = document.getElementById('decodedImage');
-console.log(decodedImage);
+
     const toggleCameraBtn = document.getElementById('toggleCameraBtn');
     const expandBtn = document.getElementById('expandBtn');
     const collapseBtn = document.getElementById('collapseBtn');
+    const redHeart = document.getElementById('redHeart');
+    const blueHeart = document.getElementById('blueHeart');
     const cameraBtn = document.getElementById('cameraBtn');
 
     let isExpanded = false;
@@ -52,32 +54,60 @@ console.log(decodedImage);
     }
 
     // Obsługa kliknięcia przycisku przełączania kamery
-        toggleCameraBtn.onclick = switchCamera;
+    toggleCameraBtn.onclick = switchCamera;
+
+    // Ustawienia kanwy
+    canvas.width = 1280;
+    canvas.height = 720;
 
     // Obsługa kliknięcia ikony aparatu
-        cameraBtn.onclick = () => {
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const imageData = canvas.toDataURL('image/jpeg'); // Zmiana formatu na jpeg
-    console.log(imageData);
-    
-    // Ustawienie źródła obrazu
-    decodedImage.src = imageData;
-    decodedImage.style.display = 'block';
+    cameraBtn.onclick = () => {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL('image/jpeg', 0.9);
+        decodedImage.src = imageData;
+        decodedImage.style.display = 'block';
 
-    // Tworzenie linku do pobrania
-    const link = document.createElement('a');
-    const now = new Date();
-    const formattedDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-    link.href = imageData;
-    link.download = `zdjecie_${formattedDate}.jpg`; // Ustalamy nazwę pliku
-    document.body.appendChild(link);
-    link.click(); // Symulacja kliknięcia w link
-    document.body.removeChild(link); // Usunięcie linku po użyciu
+        // Tworzenie linku do pobrania
+        const link = document.createElement('a');
+        const now = new Date();
+        const formattedDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+        link.href = imageData;
+        link.download = `zdjecie_${formattedDate}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-    // Przełączenie kamery po zrobieniu zdjęcia
-    switchCamera();
-};
+        // Przełączenie kamery po zrobieniu zdjęcia
+        switchCamera();
+    };
 
+    // Funkcja aplikująca czerwony filtr
+    function applyRedFilter() {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] += 100; // Zwiększenie czerwieni
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Funkcja aplikująca niebieski filtr
+    function applyBlueFilter() {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i + 2] += 100; // Zwiększenie niebieskiego
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Przypisywanie funkcji filtrowania do ikon serc
+    redHeart.onclick = applyRedFilter;
+    blueHeart.onclick = applyBlueFilter;
 
     // Funkcja do uruchomienia domyślnej kamery przy starcie
     startCamera();
@@ -89,7 +119,11 @@ console.log(decodedImage);
             isExpanded = true;
             collapseBtn.style.display = 'flex';
             expandBtn.style.display = 'none';
-            cameraBtn.style.display = 'flex'; // Pokaż ikonę aparatu
+            cameraBtn.style.display = 'flex';
+
+            // Pokaż ikony serc, gdy obraz jest powiększony
+            redHeart.style.display = 'flex';
+            blueHeart.style.display = 'flex';
         }
     };
 
@@ -100,7 +134,11 @@ console.log(decodedImage);
             isExpanded = false;
             collapseBtn.style.display = 'none';
             expandBtn.style.display = 'flex';
-            cameraBtn.style.display = 'none'; // Ukryj ikonę aparatu
+            cameraBtn.style.display = 'none';
+
+            // Ukryj ikony serc, gdy obraz jest pomniejszony
+            redHeart.style.display = 'none';
+            blueHeart.style.display = 'none';
         }
     };
 });
