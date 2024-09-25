@@ -78,16 +78,17 @@ window.onload = () => {
 
      // Funkcja przełączania kamer
     async function switchCamera() {
-        if (videoDevices.length === 0) {
+       if (videoDevices.length === 0) {
             const devices = await navigator.mediaDevices.enumerateDevices();
             videoDevices = devices.filter(device => device.kind === 'videoinput');
         }
-
+   console.log(videoDevices);
         if (videoDevices.length > 1) {
             // Przełączanie między kamerami
             currentCameraIndex = (currentCameraIndex + 1) % videoDevices.length;
             stopCurrentStream();
-            await startCamera(videoDevices[currentCameraIndex].deviceId);
+             await initCameraStream(videoDevices[currentCameraIndex].deviceId);
+            //await startCamera(videoDevices[currentCameraIndex].deviceId);
         }
     }
 
