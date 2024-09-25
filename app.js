@@ -82,45 +82,8 @@ window.onload = () => {
    initCameraStream();
  };
 
-
-//      // Funkcja przełączania kamer
-//     async function switchCamera() {
-//        if (videoDevices.length === 0) {
-//             const devices = await navigator.mediaDevices.enumerateDevices();
-//             videoDevices = devices.filter(device => device.kind === 'videoinput');
-//         }
-//    console.log(videoDevices);
-//         if (videoDevices.length > 1) {
-//             // Przełączanie między kamerami
-//             currentCameraIndex = (currentCameraIndex + 1) % videoDevices.length;
-//             stopCurrentStream();
-//              await initCameraStream(videoDevices[currentCameraIndex].deviceId);
-//             //await startCamera(videoDevices[currentCameraIndex].deviceId);
-//         }
-//     }
-
-//     // Obsługa kliknięcia przycisku przełączania kamery
-//     toggleCameraBtn.onclick = switchCamera;
-
-
     // Obsługa kliknięcia ikony aparatu
-    cameraBtn.onclick = () => {
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/jpeg', 0.9);
-
-        // Tworzenie linku do pobrania
-        const link = document.createElement('a');
-        const now = new Date();
-        const formattedDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-        link.href = imageData;
-        link.download = `zdjecie_${formattedDate}.jpg`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        // Przełączenie kamery po zrobieniu zdjęcia
-        switchCamera();
-    };
+    cameraBtn.onclick = () => {  };
 
 
     // Powiększenie obrazu
