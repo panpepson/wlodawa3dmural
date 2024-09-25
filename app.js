@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const context  = canvas.getContext('2d', { willReadFrequently: true });
     const decodedImage = document.getElementById('decodedImage');
 
     const toggleCameraBtn = document.getElementById('toggleCameraBtn');
@@ -15,30 +15,68 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStream = null;
     let videoDevices = [];
     let currentCameraIndex = 0;
+    let kolor = 'normal';  // 'red', 'blue', 'normal'
 
-    // Funkcja uruchamiania kamery
-    async function startCamera(deviceId = null) {
-        const constraints = {
-            video: deviceId ? { deviceId: { exact: deviceId } } : true
-        };
+function drawVideoToCanvas() {
+    // Rysowanie obrazu z kamery
+     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 4) {
+        if (kolor === 'red') {
+              data[i] = data[i] + 100;  
+            data[i + 1] = data[i + 1] - 50;  
+            data[i + 2] = data[i + 2] - 50;  
+        } else if (kolor === 'blue') {
+            data[i] = data[i] - 50;   // Czerwony kanał (R)
+            data[i + 1] = data[i + 1] - 50;  // Zielony kanał (G)
+            data[i + 2] = data[i + 2] + 100;  // Niebieski kanał (B)
+        } else if (kolor === 'normal') {
+           }
+    }
+    // Nakładamy zmienione piksele z powrotem na canvas
+    context.putImageData(imageData, 0, 0);
+    // Wywołanie pętli renderowania, aby obraz był dynamicznie aktualizowany
+    requestAnimationFrame(drawVideoToCanvas);
+    
+}
 
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+// Inicjalizacja wideo z kamery
+function initCameraStream() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
             video.srcObject = stream;
-            currentStream = stream;
-        } catch (error) {
-            console.error('Błąd uruchamiania kamery:', error);
-        }
-    }
+            video.play();
 
-    // Zatrzymanie bieżącego strumienia
-    function stopCurrentStream() {
-        if (currentStream) {
-            currentStream.getTracks().forEach(track => track.stop());
-        }
-    }
+            // Po uruchomieniu wideo dopasuj rozmiar canvasu
+            video.addEventListener('loadedmetadata', () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                drawVideoToCanvas();
+            });
+        })
+        .catch(error => {
+            console.error('Błąd dostępu do kamery:', error);
+        });
+}
 
-    // Funkcja przełączania kamer
+    // Przypisywanie funkcji filtrowania do ikon serc
+    redHeart.onclick = () => {
+        kolor = 'red';  // Ustawienie filtra na czerwony
+      };
+    blueHeart.onclick = () => {
+        kolor = 'blue';  // Ustawienie filtra na niebieski
+      };
+
+
+
+// Inicjalizacja po załadowaniu strony
+window.onload = () => {
+   initCameraStream();
+ };
+
+
+     // Funkcja przełączania kamer
     async function switchCamera() {
         if (videoDevices.length === 0) {
             const devices = await navigator.mediaDevices.enumerateDevices();
@@ -56,16 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Obsługa kliknięcia przycisku przełączania kamery
     toggleCameraBtn.onclick = switchCamera;
 
-    // Ustawienia kanwy
-    canvas.width = 1280;
-    canvas.height = 720;
 
     // Obsługa kliknięcia ikony aparatu
     cameraBtn.onclick = () => {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = canvas.toDataURL('image/jpeg', 0.9);
-        decodedImage.src = imageData;
-        decodedImage.style.display = 'block';
 
         // Tworzenie linku do pobrania
         const link = document.createElement('a');
@@ -81,41 +114,17 @@ document.addEventListener('DOMContentLoaded', () => {
         switchCamera();
     };
 
-    // Funkcja aplikująca czerwony filtr
-    function applyRedFilter() {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            data[i] += 100; // Zwiększenie czerwieni
-        }
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    // Funkcja aplikująca niebieski filtr
-    function applyBlueFilter() {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            data[i + 2] += 100; // Zwiększenie niebieskiego
-        }
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    // Przypisywanie funkcji filtrowania do ikon serc
-    redHeart.onclick = applyRedFilter;
-    blueHeart.onclick = applyBlueFilter;
 
     // Funkcja do uruchomienia domyślnej kamery przy starcie
-    startCamera();
+    //startCamera();
+  //  drawVideoToCanvas();  // Uruchomienie pętli rysowania
 
     // Powiększenie obrazu
     expandBtn.onclick = () => {
         if (!isExpanded) {
             video.classList.add('expanded');
+           canvas.classList.add('canvas1');
+            
             isExpanded = true;
             collapseBtn.style.display = 'flex';
             expandBtn.style.display = 'none';
@@ -131,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     collapseBtn.onclick = () => {
         if (isExpanded) {
             video.classList.remove('expanded');
+            canvas.classList.remove('canvas1');
             isExpanded = false;
             collapseBtn.style.display = 'none';
             expandBtn.style.display = 'flex';
@@ -139,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ukryj ikony serc, gdy obraz jest pomniejszony
             redHeart.style.display = 'none';
             blueHeart.style.display = 'none';
+            kolor = 'normal';
         }
     };
 });
-

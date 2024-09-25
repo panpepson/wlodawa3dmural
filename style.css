@@ -1,0 +1,118 @@
+  body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #ddd9d3;
+        }
+
+video{
+      display: none;
+}
+
+canvas {
+    top: 0;
+    left: 0;
+    z-index: 1001;
+} 
+  
+ .canvas1 {
+   width: 100vw;
+    height: 100vh;
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    z-index: 1001;
+} 
+  
+        #decodedImage {
+            display: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .expanded {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            object-fit: cover;
+        }
+        .arrow {
+            position: absolute;
+            width: 51px; /* Powiększone koło */
+            height: 51px; /* Powiększone koło */
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001; /* Wysoki z-index */
+        }
+        .up-arrow {
+            bottom: 12px;
+            right: 10px; /* Niebieskie koło w prawym dolnym rogu */
+        }
+        .down-arrow {
+            bottom: 70px; /* Przesunięcie w górę */
+            right: 10px; /* Niebieskie koło w prawym dolnym rogu */
+            display: none; /* Domyślnie ukryta ikona zmniejszenia */
+        }
+        .camera-icon {
+            position: absolute;
+            width: 51px; /* Powiększone koło */
+            height: 51px; /* Powiększone koło */
+           
+            border-radius: 50%;
+            display: none; /* Domyślnie ukryta ikona */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001; /* Wysoki z-index */
+            bottom: 10px; /* Położenie ikony aparatu */
+            left: calc(50% - 25.5px); /* Środek ekranu */
+        }
+
+#toggleCameraBtn {
+    background: transparent; /* Przezroczyste tło */
+    border: none; /* Brak krawędzi */
+    padding: 0; /* Brak odstępów */
+    cursor: pointer; /* Wskaźnik myszy na przycisk */
+    position: relative; /* Umożliwia pozycjonowanie ikon */
+}
+.heart-icon {
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1002; /* Powinny być nad kamerą */
+}
+.red-heart {
+    bottom: 51px; /* 21px nad ikoną aparatu */
+    left: calc(50% - 71px); /* Lewa strona serduszka, 51px od środka + 21px */
+}
+.blue-heart {
+    bottom: 51px; /* 21px nad ikoną aparatu */
+    left: calc(50% + 25px); /* Prawa strona serduszka */
+}
+.top {
+    margin-top: 6px;
+text-align: center;
+font-size: 1em;
+img {
+    width: 180px;
+    height: 50px;   
+}
+text-align: right;
+}
+.pot {
+     margin-top: 12px;
+    text-align: center;
+font-size: 1em;
+}
