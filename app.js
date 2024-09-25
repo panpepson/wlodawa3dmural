@@ -41,24 +41,31 @@ function drawVideoToCanvas() {
     
 }
 
-// Inicjalizacja wideo z kamery
-function initCameraStream() {
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-            video.play();
 
-            // Po uruchomieniu wideo dopasuj rozmiar canvasu
-            video.addEventListener('loadedmetadata', () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                drawVideoToCanvas();
-            });
-        })
-        .catch(error => {
-            console.error('Błąd dostępu do kamery:', error);
+// Inicjalizacja wideo z kamery, preferując tylną kamerę (environment)
+function initCameraStream() {
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: { exact: 'environment' }  // Preferencja kamery tylnej
+        }
+    })
+    .then(stream => {
+        video.srcObject = stream;
+        video.play();
+
+        // Po uruchomieniu wideo dopasuj rozmiar canvasu
+        video.addEventListener('loadedmetadata', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            drawVideoToCanvas();
         });
+    })
+    .catch(error => {
+        console.error('Błąd dostępu do kamery:', error);
+    });
 }
+
+
 
     // Przypisywanie funkcji filtrowania do ikon serc
     redHeart.onclick = () => {
@@ -76,24 +83,24 @@ window.onload = () => {
  };
 
 
-     // Funkcja przełączania kamer
-    async function switchCamera() {
-       if (videoDevices.length === 0) {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            videoDevices = devices.filter(device => device.kind === 'videoinput');
-        }
-   console.log(videoDevices);
-        if (videoDevices.length > 1) {
-            // Przełączanie między kamerami
-            currentCameraIndex = (currentCameraIndex + 1) % videoDevices.length;
-            stopCurrentStream();
-             await initCameraStream(videoDevices[currentCameraIndex].deviceId);
-            //await startCamera(videoDevices[currentCameraIndex].deviceId);
-        }
-    }
+//      // Funkcja przełączania kamer
+//     async function switchCamera() {
+//        if (videoDevices.length === 0) {
+//             const devices = await navigator.mediaDevices.enumerateDevices();
+//             videoDevices = devices.filter(device => device.kind === 'videoinput');
+//         }
+//    console.log(videoDevices);
+//         if (videoDevices.length > 1) {
+//             // Przełączanie między kamerami
+//             currentCameraIndex = (currentCameraIndex + 1) % videoDevices.length;
+//             stopCurrentStream();
+//              await initCameraStream(videoDevices[currentCameraIndex].deviceId);
+//             //await startCamera(videoDevices[currentCameraIndex].deviceId);
+//         }
+//     }
 
-    // Obsługa kliknięcia przycisku przełączania kamery
-    toggleCameraBtn.onclick = switchCamera;
+//     // Obsługa kliknięcia przycisku przełączania kamery
+//     toggleCameraBtn.onclick = switchCamera;
 
 
     // Obsługa kliknięcia ikony aparatu
