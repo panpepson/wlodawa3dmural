@@ -115,10 +115,6 @@ window.onload = () => {
     };
 
 
-    // Funkcja do uruchomienia domyślnej kamery przy starcie
-    //startCamera();
-  //  drawVideoToCanvas();  // Uruchomienie pętli rysowania
-
     // Powiększenie obrazu
     expandBtn.onclick = () => {
         if (!isExpanded) {
