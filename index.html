@@ -3,15 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://wlodawa.net/wp-content/uploads/2015/11/cropped-POL_Włodawa_COA.svg_-32x32.png" sizes="32x32" />
-<link rel="icon" href="https://wlodawa.net/wp-content/uploads/2015/11/cropped-POL_Włodawa_COA.svg_-192x192.png" sizes="192x192" />
-<link rel="apple-touch-icon-precomposed" href="https://wlodawa.net/wp-content/uploads/2015/11/cropped-POL_Włodawa_COA.svg_-180x180.png" />
-    <title>wlodawa.net - Mura3Detektor</title>
+       <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="./3d-lwl-32x32.png" sizes="32x32" />
+<link rel="icon" href="./3d-lwl-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="./3d-lwl-180x180.png" />
+    <title>3d.wlodawa.net - Mura3Detektor</title>
+ <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker zarejestrowany:', registration);
+                    })
+                    .catch(error => {
+                        console.error('Rejestracja Service Worker nie powiodła się:', error);
+                    });
+            });
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body><div class="top">
     <strong>Mural detektor</strong><br/>
-   <a href="https://wlodawa.net" target="_blank"><img src="https://wlodawa.net/wp-content/uploads/2019/12/lwl-280x80-cien.webp" alt="logo-wlodawa.net" srcset=""></a>
+   <a href="https://wlodawa.net" target="_blank"><img src="./img/3d-lwl-166x44.png" alt="logo-wlodawa.net" srcset=" ./img/3d-lwl-166x44.png"></a>
 </div>
   <video id="video" > </video>  
         <canvas id="canvas"  ></canvas>
