@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
        <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="./3d-lwl-32x32.png" sizes="32x32" />
-<link rel="icon" href="./3d-lwl-192x192.png" sizes="192x192" />
-<link rel="apple-touch-icon-precomposed" href="./3d-lwl-180x180.png" />
+    <link rel="icon" href="/img/3d-lwl-32x32.png" sizes="32x32" />
+<link rel="icon" href="/img/3d-lwl-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="/img/3d-lwl-180x180.png" />
     <title>3d.wlodawa.net - Mura3Detektor</title>
  <script>
         if ('serviceWorker' in navigator) {
@@ -33,8 +33,9 @@
 </head>
 <body><div class="top">
     <strong>Mural detektor 🤖</strong><br/>
-   <a href="https://wlodawa.net" target="_blank"><img src="./img/3d-lwl-166x44.png" alt="logo-wlodawa.net" srcset=" ./img/3d-lwl-166x44.png"></a>
+   <a href="https://wlodawa.net" target="_blank"><img src="/img/3d-lwl-166x44.png" alt="logo-wlodawa.net" srcset="/img/3d-lwl-166x44.png"></a>
 </div>
+<span id="cooki" style="display: none;"></span>
   <video id="video" > </video>  
         <canvas id="canvas"  ></canvas>
 <div class="arrow up-arrow" id="expandBtn">
@@ -61,5 +62,7 @@
         v.0.1.0
     </div>
 <script src="app.js"></script>
+<style>#cooki{padding:20px;border:1px solid #ccc;background-color:#f8f9fa;border-radius:5px;text-align:center;}.btn{font-size:16px;padding:10px 20px;margin:5px;border:none;border-radius:5px;cursor:pointer;}.btn-primary{background-color:#007bff;color:white;}.btn-danger{background-color:#dc3545;color:white;}</style>
+<script>document.addEventListener('DOMContentLoaded',function(){function getCookie(name){const value="; "+document.cookie;const parts=value.split("; "+name+"=");if(parts.length==2)return parts.pop().split(";").shift();}if(!getCookie('3dLWL')){const message=`<b>Czy lubisz cookies?</b> &#x1F36A; Ta aplikacja wymaga zgody na tak zwane <b>cookies</b> czyli ciasteczka i właśnie informuje Cię, że tutaj są zbierane ciasteczka firm trzecich. Jeśli nie zgadzasz się na tego typu internetowe praktyki, prosimy opuść tę stronę. We use cookies to ensure you get the best experience on our website. <a href="https://pl.wikipedia.org/wiki/HTTP_cookie" target="_blank">Zobacz więcej</a><br><br><button id="btnYes" type="button" class="btn btn-primary">Tak</button><button id="btnNo" type="button" class="btn btn-danger">Nie</button>`;document.getElementById('cooki').innerHTML=message;document.getElementById('cooki').style.display='block';}document.addEventListener('click',function(event){if(event.target&&event.target.id==='btnYes'){document.cookie="3dLWL=true; path=/; max-age="+(60*60*24*365);document.getElementById('cooki').style.display='none';}if(event.target&&event.target.id==='btnNo'){alert("Zamykanij aplikacje.");window.close();}});});</script>
 </body>
 </html>
