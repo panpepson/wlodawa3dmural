@@ -24,13 +24,10 @@ function drawVideoToCanvas() {
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
         if (kolor === 'red') {
-//  data[i] = Math.min(data[i] + 200, 255);   // Czerwony nie przekracza 255
-//     data[i + 1] = Math.max(data[i + 1] - 5, 0);   // Zielony nie spada poniżej 0
-//     data[i + 2] = Math.max(data[i + 2] - 1, 0); 
+    data[i] = Math.min(data[i] + 200, 255);   // Czerwony nie przekracza 255
+     data[i + 1] = Math.max(data[i + 1] - 5, 0);   // Zielony nie spada poniżej 0
+     data[i + 2] = Math.max(data[i + 2] - 1, 0); 
 
-    data[i] = 135;
-    data[i + 1] =  -15;
-    data[i + 2] = -5;
 
         } else if (kolor === 'blue') {
            data[i] = Math.max(data[i] - 5, 0);         // Czerwony kanał (R), nie spada poniżej 0
