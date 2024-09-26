@@ -80,7 +80,7 @@ function initCameraStream() {
       };
     blueHeart.onclick = () => {
         kolor = 'blue';  // Ustawienie filtra na niebieski
-          redIntensity += 10;  // Zwiększenie intensywności czerwonego o 10
+          blueIntensity += 10;  // Zwiększenie intensywnności niebieskiego o 10
       };
 
 
