@@ -28,9 +28,9 @@ function drawVideoToCanvas() {
             data[i + 1] = data[i + 1] - 50;  
             data[i + 2] = data[i + 2] - 50;  
         } else if (kolor === 'blue') {
-            data[i] = data[i] - 250;   // Czerwony kanał (R)
+            data[i] = data[i] - 50;   // Czerwony kanał (R)
             data[i + 1] = data[i + 1] - 50;  // Zielony kanał (G)
-            data[i + 2] = data[i + 2] + 100;  // Niebieski kanał (B)
+            data[i + 2] = data[i + 2] + 200;  // Niebieski kanał (B)
         } else if (kolor === 'normal') {
            }
     }
