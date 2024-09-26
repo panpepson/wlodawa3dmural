@@ -24,7 +24,7 @@ function drawVideoToCanvas() {
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
         if (kolor === 'red') {
-              data[i] = data[i] + 100;  
+              data[i] = data[i] + 150;  
             data[i + 1] = data[i + 1] - 50;  
             data[i + 2] = data[i + 2] - 50;  
         } else if (kolor === 'blue') {
