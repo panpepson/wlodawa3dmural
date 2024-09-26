@@ -17,23 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCameraIndex = 0;
     let kolor = 'normal';  // 'red', 'blue', 'normal'
 
+    // Zmienne śledzące intensywność koloru
+    let redIntensity = 0;  // Początkowe zwiększenie czerwieni
+    let blueIntensity = 0; // Początkowe zwiększenie niebieskiego
+
 function drawVideoToCanvas() {
     // Rysowanie obrazu z kamery
      context.drawImage(video, 0, 0, canvas.width, canvas.height);
      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
-        if (kolor === 'red') {
-    data[i] = Math.min(data[i] + 200, 255);   // Czerwony nie przekracza 255
-     data[i + 1] = Math.max(data[i + 1] - 5, 0);   // Zielony nie spada poniżej 0
-     data[i + 2] = Math.max(data[i + 2] - 1, 0); 
-
-
-        } else if (kolor === 'blue') {
-           data[i] = Math.max(data[i] - 5, 0);         // Czerwony kanał (R), nie spada poniżej 0
-    data[i + 1] = Math.max(data[i + 1] - 5, 0); // Zielony kanał (G), nie spada poniżej 0
-    data[i + 2] = Math.min(data[i + 2] + 100, 255); // Niebieski kanał (B), nie przekracza 255
-
+    if (kolor === 'red') {
+                // Zwiększ czerwoną intensywność o redIntensity
+                data[i] = Math.min(data[i] + redIntensity, 255);   // Czerwony kanał (R), max 255
+                data[i + 1] = Math.max(data[i + 1] - 5, 0);        // Zielony kanał (G)
+                data[i + 2] = Math.max(data[i + 2] - 1, 0);        // Niebieski kanał (B)
+            } else if (kolor === 'blue') {
+                // Zwiększ niebieską intensywność o blueIntensity
+                data[i] = Math.max(data[i] - 5, 0);                // Czerwony kanał (R)
+                data[i + 1] = Math.max(data[i + 1] - 5, 0);        // Zielony kanał (G)
+                data[i + 2] = Math.min(data[i + 2] + blueIntensity, 255); //
         } else if (kolor === 'normal') {
            }
     }
@@ -73,9 +76,11 @@ function initCameraStream() {
     // Przypisywanie funkcji filtrowania do ikon serc
     redHeart.onclick = () => {
         kolor = 'red';  // Ustawienie filtra na czerwony
+          redIntensity += 10;  // Zwiększenie intensywności czerwonego o 10
       };
     blueHeart.onclick = () => {
         kolor = 'blue';  // Ustawienie filtra na niebieski
+          redIntensity += 10;  // Zwiększenie intensywności czerwonego o 10
       };
 
 
