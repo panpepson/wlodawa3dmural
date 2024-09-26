@@ -30,12 +30,12 @@ function drawVideoToCanvas() {
     if (kolor === 'red') {
                 // Zwiększ czerwoną intensywność o redIntensity
                 data[i] = Math.min(data[i] + redIntensity, 255);   // Czerwony kanał (R), max 255
-                data[i + 1] = Math.max(data[i + 1] - 5, 0);        // Zielony kanał (G)
+                data[i + 1] = Math.max(data[i + 1] - 1, 0);        // Zielony kanał (G)
                 data[i + 2] = Math.max(data[i + 2] - 1, 0);        // Niebieski kanał (B)
             } else if (kolor === 'blue') {
                 // Zwiększ niebieską intensywność o blueIntensity
                 data[i] = Math.max(data[i] - 5, 0);                // Czerwony kanał (R)
-                data[i + 1] = Math.max(data[i + 1] - 5, 0);        // Zielony kanał (G)
+                data[i + 1] = Math.max(data[i + 1] - 1, 0);        // Zielony kanał (G)
                 data[i + 2] = Math.min(data[i + 2] + blueIntensity, 255); //
         } else if (kolor === 'normal') {
            }
