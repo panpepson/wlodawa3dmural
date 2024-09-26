@@ -29,8 +29,8 @@ function drawVideoToCanvas() {
 //     data[i + 2] = Math.max(data[i + 2] - 1, 0); 
 
     data[i] = 235;
-    data[i + 1] = 5;
-    data[i + 2] = 5;
+    data[i + 1] =  -15;
+    data[i + 2] = -5;
 
         } else if (kolor === 'blue') {
            data[i] = Math.max(data[i] - 5, 0);         // Czerwony kanał (R), nie spada poniżej 0
