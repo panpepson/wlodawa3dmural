@@ -24,14 +24,14 @@ function drawVideoToCanvas() {
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
         if (kolor === 'red') {
-              data[i] = data[i] + 200;  
-            data[i + 1] = data[i + 1] - 50;  
-            data[i + 2] = data[i + 2] - 1;
-            alert(data[i + 2]); 
+ data[i] = Math.min(data[i] + 200, 255);   // Czerwony nie przekracza 255
+    data[i + 1] = Math.max(data[i + 1] - 50, 0);   // Zielony nie spada poniżej 0
+    data[i + 2] = Math.max(data[i + 2] - 1, 0); 
         } else if (kolor === 'blue') {
-            data[i] = data[i] - 50;   // Czerwony kanał (R)
-            data[i + 1] = data[i + 1] - 50;  // Zielony kanał (G)
-            data[i + 2] = data[i + 2] + 100;  // Niebieski kanał (B)
+           data[i] = Math.max(data[i] - 50, 0);         // Czerwony kanał (R), nie spada poniżej 0
+    data[i + 1] = Math.max(data[i + 1] - 50, 0); // Zielony kanał (G), nie spada poniżej 0
+    data[i + 2] = Math.min(data[i + 2] + 100, 255); // Niebieski kanał (B), nie przekracza 255
+
         } else if (kolor === 'normal') {
            }
     }
