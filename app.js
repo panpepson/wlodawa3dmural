@@ -26,7 +26,7 @@ function drawVideoToCanvas() {
         if (kolor === 'red') {
               data[i] = data[i] + 200;  
             data[i + 1] = data[i + 1] - 50;  
-            data[i + 2] = data[i + 2] - 50;  
+            data[i + 2] = data[i + 2] - 350;  
         } else if (kolor === 'blue') {
             data[i] = data[i] - 50;   // Czerwony kanał (R)
             data[i + 1] = data[i + 1] - 50;  // Zielony kanał (G)
