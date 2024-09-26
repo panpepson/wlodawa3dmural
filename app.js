@@ -28,7 +28,7 @@ function drawVideoToCanvas() {
 //     data[i + 1] = Math.max(data[i + 1] - 5, 0);   // Zielony nie spada poniżej 0
 //     data[i + 2] = Math.max(data[i + 2] - 1, 0); 
 
-    data[i] = 235;
+    data[i] = 135;
     data[i + 1] =  -15;
     data[i + 2] = -5;
 
