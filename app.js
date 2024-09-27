@@ -22,14 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (mode === "red") {
         data[i] = Math.min(data[i] + redIntensity, 255); // zwiększenie nasycenia czerwieni
         if (data[i] === 255) {
-          data[i + 1] = Math.max(data[i + 1] - 5, 0); // zmniejszenie zielonego
-          data[i + 2] = Math.max(data[i + 2] - 5, 0); // zmniejszenie niebieskiego
+          data[i + 1] = Math.max(data[i + 1] - 15, 0); // zmniejszenie zielonego
+          data[i + 2] = Math.max(data[i + 2] - 15, 0); // zmniejszenie niebieskiego
         }
       } else if (mode === "blue") {
         data[i + 2] = Math.min(data[i + 2] + blueIntensity, 255); // zwiększenie nasycenia niebieskiego
         if (data[i + 2] === 255) {
-          data[i] = Math.max(data[i] - 5, 0); // zmniejszenie czerwonego
-          data[i + 1] = Math.max(data[i + 1] - 5, 0); // zmniejszenie zielonego
+          data[i] = Math.max(data[i] - 15, 0); // zmniejszenie czerwonego
+          data[i + 1] = Math.max(data[i + 1] - 15, 0); // zmniejszenie zielonego
         }
       }
     }
