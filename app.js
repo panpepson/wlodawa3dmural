@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
           data[i + 1] = Math.max(data[i + 1] - 15, 0); // zmniejszenie zielonego
           data[i + 2] = Math.max(data[i + 2] - 15, 0); // zmniejszenie niebieskiego
         }
+		alert(data[i], data[i + 1], data[i + 2]);
       } else if (mode === "blue") {
         data[i + 2] = Math.min(data[i + 2] + blueIntensity, 255); // zwiększenie nasycenia niebieskiego
         if (data[i + 2] === 255) {
