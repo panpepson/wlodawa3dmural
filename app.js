@@ -1,1 +1,100 @@
-document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("video"),t=document.getElementById("canvas"),n=t.getContext("2d",{willReadFrequently:!0}),a=document.getElementById("redHeart"),o=document.getElementById("blueHeart"),d=document.getElementById("expandBtn"),i=document.getElementById("collapseBtn"),r=document.getElementById("cameraBtn");let c=!1,l="normal",m=0,u=0;function s(){n.drawImage(e,0,0,t.width,t.height);const a=n.getImageData(0,0,t.width,t.height),o=a.data;for(let e=0;e<o.length;e+=4)"red"===l?(o[e]=Math.min(o[e]+m,255),o[e+1]=Math.max(o[e+1]-1,0),o[e+2]=Math.max(o[e+2]-1,0)):"blue"===l&&(o[e]=Math.max(o[e]-5,0),o[e+1]=Math.max(o[e+1]-1,0),o[e+2]=Math.min(o[e+2]+u,255));n.putImageData(a,0,0),requestAnimationFrame(s)}function p(){navigator.mediaDevices.getUserMedia({video:{facingMode:{exact:"environment"}}}).then(n=>{e.srcObject=n,e.play(),e.addEventListener("loadedmetadata",()=>{t.width=e.videoWidth,t.height=e.videoHeight,s()})}).catch(e=>{console.error("Błąd dostępu do kamery:",e)})}a.onclick=()=>{l="red",m+=10},o.onclick=()=>{l="blue",u+=10},window.onload=()=>{p()},r.onclick=()=>{},d.onclick=()=>{c||(e.classList.add("expanded"),t.classList.add("canvas1"),c=!0,i.style.display="flex",d.style.display="none",r.style.display="flex",a.style.display="flex",o.style.display="flex")},i.onclick=()=>{c&&(e.classList.remove("expanded"),t.classList.remove("canvas1"),c=!1,i.style.display="none",d.style.display="flex",r.style.display="none",a.style.display="none",o.style.display="none",l="normal")}});
+document.addEventListener("DOMContentLoaded", () => {
+  const video = document.getElementById("video"),
+    canvas = document.getElementById("canvas"),
+    context = canvas.getContext("2d", { willReadFrequently: true }),
+    redHeart = document.getElementById("redHeart"),
+    blueHeart = document.getElementById("blueHeart"),
+    expandBtn = document.getElementById("expandBtn"),
+    collapseBtn = document.getElementById("collapseBtn"),
+    cameraBtn = document.getElementById("cameraBtn");
+
+  let isExpanded = false,
+    mode = "normal",
+    redIntensity = 0,
+    blueIntensity = 0;
+
+  function processFrame() {
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height),
+      data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      if (mode === "red") {
+        data[i] = Math.min(data[i] + redIntensity, 255); // zwiększenie nasycenia czerwieni
+        if (data[i] === 255) {
+          data[i + 1] = Math.max(data[i + 1] - 5, 0); // zmniejszenie zielonego
+          data[i + 2] = Math.max(data[i + 2] - 5, 0); // zmniejszenie niebieskiego
+        }
+      } else if (mode === "blue") {
+        data[i + 2] = Math.min(data[i + 2] + blueIntensity, 255); // zwiększenie nasycenia niebieskiego
+        if (data[i + 2] === 255) {
+          data[i] = Math.max(data[i] - 5, 0); // zmniejszenie czerwonego
+          data[i + 1] = Math.max(data[i + 1] - 5, 0); // zmniejszenie zielonego
+        }
+      }
+    }
+
+    context.putImageData(imageData, 0, 0);
+    requestAnimationFrame(processFrame);
+  }
+
+  function startVideo() {
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: { exact: "environment" } } })
+      .then((stream) => {
+        video.srcObject = stream;
+        video.play();
+        video.addEventListener("loadedmetadata", () => {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          processFrame();
+        });
+      })
+      .catch((error) => {
+        console.error("Błąd dostępu do kamery:", error);
+      });
+  }
+
+  redHeart.onclick = () => {
+    mode = "red";
+    redIntensity += 10;
+  };
+
+  blueHeart.onclick = () => {
+    mode = "blue";
+    blueIntensity += 10;
+  };
+
+  window.onload = () => {
+    startVideo();
+  };
+
+  cameraBtn.onclick = () => {};
+
+  expandBtn.onclick = () => {
+    if (!isExpanded) {
+      video.classList.add("expanded");
+      canvas.classList.add("canvas1");
+      isExpanded = true;
+      collapseBtn.style.display = "flex";
+      expandBtn.style.display = "none";
+      cameraBtn.style.display = "flex";
+      redHeart.style.display = "flex";
+      blueHeart.style.display = "flex";
+    }
+  };
+
+  collapseBtn.onclick = () => {
+    if (isExpanded) {
+      video.classList.remove("expanded");
+      canvas.classList.remove("canvas1");
+      isExpanded = false;
+      collapseBtn.style.display = "none";
+      expandBtn.style.display = "flex";
+      cameraBtn.style.display = "none";
+      redHeart.style.display = "none";
+      blueHeart.style.display = "none";
+      mode = "normal";
+    }
+  };
+});
