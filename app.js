@@ -10,8 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isExpanded = false,
     mode = "normal",
-    redIntensity = 0,
-    blueIntensity = 0;
+    redLevel = 0,
+    blueLevel = 0,
+    increment = 10; // Określa, o ile zwiększamy nasycenie przy każdym naciśnięciu
 
   function processFrame() {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -20,18 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < data.length; i += 4) {
       if (mode === "red") {
-        data[i] = Math.min(data[i] + redIntensity, 255); // zwiększenie nasycenia czerwieni
-        if (data[i] === 255) {
-          data[i + 1] = Math.max(data[i + 1] - 15, 0); // zmniejszenie zielonego
-          data[i + 2] = Math.max(data[i + 2] - 15, 0); // zmniejszenie niebieskiego
-        }
-		alert("R:"+data[i]+" G: "+ data[i + 1] + " B: " + data[i + 2]);
+        data[i] = Math.min(data[i] + redLevel, 255); // zwiększenie czerwieni
+        data[i + 1] = Math.max(data[i + 1] - redLevel, 0); // zmniejszenie zielonego
+        data[i + 2] = Math.max(data[i + 2] - redLevel, 0); // zmniejszenie niebieskiego
       } else if (mode === "blue") {
-        data[i + 2] = Math.min(data[i + 2] + blueIntensity, 255); // zwiększenie nasycenia niebieskiego
-        if (data[i + 2] === 255) {
-          data[i] = Math.max(data[i] - 15, 0); // zmniejszenie czerwonego
-          data[i + 1] = Math.max(data[i + 1] - 15, 0); // zmniejszenie zielonego
-        }
+        data[i] = Math.max(data[i] - blueLevel, 0); // zmniejszenie czerwieni
+        data[i + 1] = Math.max(data[i + 1] - blueLevel, 0); // zmniejszenie zielonego
+        data[i + 2] = Math.min(data[i + 2] + blueLevel, 255); // zwiększenie niebieskiego
       }
     }
 
@@ -58,12 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   redHeart.onclick = () => {
     mode = "red";
-    redIntensity += 10;
+    redLevel = Math.min(redLevel + increment, 255); // Zwiększanie nasycenia czerwieni aż do 255
   };
 
   blueHeart.onclick = () => {
     mode = "blue";
-    blueIntensity += 10;
+    blueLevel = Math.min(blueLevel + increment, 255); // Zwiększanie nasycenia niebieskiego aż do 255
   };
 
   window.onload = () => {
@@ -96,6 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
       redHeart.style.display = "none";
       blueHeart.style.display = "none";
       mode = "normal";
+      redLevel = 0; // Resetowanie poziomu nasycenia czerwieni
+      blueLevel = 0; // Resetowanie poziomu nasycenia niebieskiego
     }
   };
 });
